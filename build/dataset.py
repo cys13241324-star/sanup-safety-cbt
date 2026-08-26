@@ -10,9 +10,20 @@ import re
 
 import psparse
 
-SRC = r'D:\project\산업안전기사\산업안전기사\src\past'
-META = r'D:\project\산업안전기사\산업안전기사\기출_재배열'
-FIG = r'D:\project\산업안전기사\산업안전기사\src\fig'
+def pick(*cands):
+    """컴퓨터마다 자리가 달라 실제로 있는 쪽을 고른다."""
+    for c in cands:
+        if os.path.exists(c):
+            return c
+    return cands[0]
+
+
+ROOT = pick(r'D:\project\산업안전기사\산업안전기사',
+            os.path.join(os.path.expanduser('~'), 'Desktop', 'project', '산업안전기사'))
+
+SRC = os.path.join(ROOT, 'src', 'past')
+META = os.path.join(ROOT, '기출_재배열')
+FIG = os.path.join(ROOT, 'src', 'fig')
 
 SUBJ = ['안전관리론', '인간공학 및 시스템안전공학', '기계위험방지기술',
         '전기위험방지기술', '화학설비위험방지기술', '건설안전기술']

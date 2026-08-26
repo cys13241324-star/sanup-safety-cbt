@@ -17,6 +17,12 @@ import shutil
 import sys
 import collections
 
+# 한글 콘솔(cp949)에서 em대시 같은 글자에 걸려 마지막 줄이 터지는 것을 막는다.
+try:
+    sys.stdout.reconfigure(encoding='utf-8')
+except Exception:
+    pass
+
 import openpyxl
 from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.utils import get_column_letter
@@ -30,9 +36,16 @@ import card_view
 import lawcite
 from render import rich, table, wrongs, point, esc, plain
 
-OUT = r'D:\safety-cbt'
-KATEX_SRC = r'D:\electrician-cbt\CBT_2025_1회\katex'
-DONOR = r'D:\electrician-cbt\CBT_2025_1회\전기기능사_2025_1회_문항등록.xlsx'
+# 내보낼 자리와 물려받을 서식 — 컴퓨터마다 자리가 달라 있는 쪽을 고른다.
+HERE = os.path.dirname(os.path.abspath(__file__))
+OUT = dataset.pick(r'D:\safety-cbt', os.path.dirname(HERE))
+KATEX_SRC = dataset.pick(r'D:\electrician-cbt\CBT_2025_1회\katex',
+                         os.path.join(OUT, 'katex'))
+# 등록양식은 전기기능사 엑셀에서 물려받았다.  그 파일이 없으면 이미 만들어 둔
+# 산업안전기사 회차 엑셀에서 물려받는다 — 서식이 같으므로 결과가 같다.
+DONOR = dataset.pick(
+    r'D:\electrician-cbt\CBT_2025_1회\전기기능사_2025_1회_문항등록.xlsx',
+    os.path.join(OUT, 'CBT_2026_1회', '산업안전기사_2026_1회_문항등록.xlsx'))
 TEMPLATE = os.path.join(OUT, 'build', '_template.xlsx')
 
 GROUPS = [('출처', 1, 6, '475569'), ('코드', 7, 7, '4F46E5'), ('강의', 8, 8, '7C3AED'),
