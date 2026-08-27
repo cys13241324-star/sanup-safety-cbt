@@ -1,7 +1,10 @@
 // _math.json 의 수식을 KaTeX 로 실제 렌더해 본다. 깨지는 것만 찍는다.
 const fs = require('fs');
 const path = require('path');
-const katex = require('D:/electrician-cbt/CBT_2025_1회/katex/katex.min.js');
+// 저장소 안의 katex 를 먼저 쓰고, 없으면 전기기능사 쪽에서 빌린다.
+const cands = [path.join(__dirname, '..', 'katex', 'katex.min.js'),
+               'D:/electrician-cbt/CBT_2025_1회/katex/katex.min.js'];
+const katex = require(cands.find(p => fs.existsSync(p)) || cands[0]);
 
 const list = JSON.parse(fs.readFileSync(path.join(__dirname, '_math.json'), 'utf8'));
 const bad = [];
